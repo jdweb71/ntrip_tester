@@ -1,0 +1,175 @@
+<html>
+ <!------
+  Cette oeuvre est mise à disposition selon les termes de la Licence Creative Commons Attribution 
+  - Pas d'Utilisation Commerciale 
+  - Pas de Modification 
+  4.0 International
+  http://creativecommons.org/licenses/by-nc-nd/4.0/
+  09/11/2021 Julian Desfetes
+  ------->
+<head>
+  <link rel="icon" type="image/png" href="img/broadcast_pin.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="theme-color" content="#0f0c29">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
+</head>
+
+<body class="d-flex flex-column h-100">
+  <main class="flex-shrink-0">
+  <div class="container-md ">
+    <div class="row justify-content-md-center my-2">
+      <div class="col col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h4><b><i class="bi bi-broadcast-pin"></i>  <em>Ntrip Client Test</em></b></h4>
+          </div>
+
+          <form id="form" action="ajax.php" class="row ">
+            <div class="row justify-content-md-center my-1 mx-auto">
+              <div class="col col-md-5">
+                <label for="lat" class="form-label">lat (m)</label>
+                <input name="lat" class="form-control" type="number" id="lat" min="000.00000001" max="2000"
+                  step="0.00000001" required>
+              </div>
+              <div class="col col-md-5 ">
+                <label for="lon" class="form-label">lon (m)</label>
+                <input name="lon" class="form-control" type="number" id="lon" min="000.00000001" max="2000"
+                  step="0.00000001" required>
+              </div>
+            </div>
+            <div class="row justify-content-md-center my-1 mx-auto">
+              <div class="col col-md-5 ">
+                <label for="user" class="form-label">ntrip user:</label>
+                <input class="form-control" name="user" type="text" id="user" required autocorrect="off"
+                  autocapitalize="none">
+              </div>
+              <div class="col col-md-5 ">
+                <label for="pass" class="form-label">ntrip password:</label>
+                <div class="input-group">
+                <input class="form-control" name="pwd" type="password" id="pass" required autocorrect="off"
+                  autocapitalize="none">
+                  <span class="input-group-text" id="pass_show_hide">
+                    <i class="bi bi-eye-fill" id="show_eye"></i>
+                    <i class="bi bi-eye-slash-fill d-none" id="hide_eye"></i>
+                  </span>
+              </div>
+              </div>
+
+            </div>
+            <div class="row justify-content-md-center my-1 mx-auto">
+              <div class="col col-md-7">
+                <label for="caster" class="form-label">ntrip caster:</label>
+                <input name="caster_url" class="form-control" type="text" id="caster" required autocorrect="off"
+                  autocapitalize="none">
+              </div>
+              <div class="col col-md-3 ">
+                <label for="port" class="form-label">port:</label>
+                <input name="caster_port" class="form-control" type="number" id="port" min="1000" max="9999" step="1"
+                  required>
+              </div>
+            </div>
+            <div class="row justify-content-md-center my-1 mx-auto">
+              <div class="col col-md-10">
+                <label for="mp" class="form-label">mountpoint:</label>
+                <div class="input-group">
+                  <input name="mp" class="form-control" data-format="" type="text" id="mp" list="mplist" required
+                    autocorrect="off" autocomplete="off" autocapitalize="none">
+                  <datalist id="mplist"></datalist>
+                  <button class="btn btn-primary" id="getmountpoint" CausesValidation="false"><i
+                      class="bi bi-arrow-clockwise"></i></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="row justify-content-md-center my-1 mx-auto">
+              <div class="row">
+                <div class="col"></div>
+              </div>
+              <div class="col col-md-10 ">
+                <label for="ua" class="form-label">user agent:</label>
+                <input name="agent" type="text" class="form-control" id="ua" required value="NTRIP agent"
+                  autocorrect="off" autocapitalize="none">
+              </div>
+            </div>
+
+            <input name="time" type="hidden" id="time" required>
+
+            <div class="row justify-content-md-center my-2 mx-auto">
+
+              <div class="btn-group col col-md-3">
+                <button id="start" class="btn btn-primary-spacing btn-outline-primary mr-1 ">
+                  Start
+                </button>
+              </div>
+              <div class="btn-group col col-md-3 ">
+                <button id="stop" class="btn btn-primary-spacing btn-outline-primary mr-1" disabled="true">
+                  Stop
+                </button>
+              </div>
+            </div>
+
+          </form>
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="container-md invisible" id="logdata">
+    <div class="row justify-content-md-center">
+      <div class="col col-md-6 mx-1 border bg-white" id="status">
+      </div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-md-6 mx-1 border bg-white">
+        <div id="textOutput"></div>
+        <div id="outputFormat"></div>
+
+        <table class="table table-responsive w-100 mx-2">
+          <thead>
+            <th scope="col">Speed</th>
+            <th scope="col">Received</th>
+            <th scope="col">Time</th>
+            <th scope="col">
+              <i class="bi bi-question-circle-fill" data-bs-toggle="tooltip" data-bs-placement="left"
+                title="The transfer rate is taken from our servers and does not reflect the connection speed of your device."></i>
+            </th>
+          </thead>
+          <tbody id="mess"></tbody>
+        </table>
+        <div id="debug"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer mt-auto py-3 bg-light">
+  <div class="container">
+    <div class="row justify-content-md-center">
+    <div class="col col-md-10">
+    <span class="text-muted">jdwebcreation 2021 V1.00.</span>
+  </div>
+  <div class="col col-md-2">
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a>
+  </div>
+</div>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script src="js/script.js"></script>
+
+</body>
+
+
+
