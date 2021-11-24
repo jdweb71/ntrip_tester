@@ -95,7 +95,7 @@ class ntrip_cli
 
         $startime =  time();
         $head = ['Ntrip-Version: Ntrip/2.0', 'Ntrip-GGA:' . $nmea];
-        $targetFile = fopen('temp/' . $output, 'w+');
+        $targetFile = fopen(sys_get_temp_dir().'/' . $output, 'w+');
         $ch = curl_init($var);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -130,7 +130,7 @@ class ntrip_cli
 
     function check_output($file, $dl, $output = 'json')
     {
-        $filename = 'temp/' . $file;
+        $filename = sys_get_temp_dir().'/' . $file;
 
         if (file_exists($filename)) {
 
