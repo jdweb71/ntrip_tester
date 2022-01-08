@@ -20,7 +20,6 @@ if (
     isset($_GET['caster_url']) && !empty($_GET['caster_url']) &&
     isset($_GET['caster_port']) && !empty($_GET['caster_port']) &&
     isset($_GET['mp']) && !empty($_GET['mp']) &&
-    isset($_GET['time']) && !empty($_GET['time']) &&
     isset($_GET['tk']) && !empty($_GET['tk'])
 ) {
 
@@ -30,10 +29,13 @@ if (
     $user = $_GET['user'] . ':' . $_GET['pwd'];
     $agent = 'NTRIP ' . $_GET['agent'];
 
+    $now = new DateTime('NOW');
+$now->setTimezone(new DateTimeZone('UTC'));
+$time = $now->format('His.v');
 
     $coord = $ntrip_cli->convert_DD_to_DDMM($_GET['lat'], $_GET['lon'], 'array');
 
-    $nmea = '\\' . $ntrip_cli->nmea_checksum('GPGGA,' . $_GET['time'] . ',' . $coord['lat']['coord'] . ',' . $coord['lat']['dir'] . ',' . $coord['lon']['coord'] . ',' . $coord['lon']['dir'] . ',1,00,0.0,00.00,M,-25.669,M,1,');
+    $nmea = '\\' . $ntrip_cli->nmea_checksum('GPGGA,' . $time . ',' . $coord['lat']['coord'] . ',' . $coord['lat']['dir'] . ',' . $coord['lon']['coord'] . ',' . $coord['lon']['dir'] . ',1,00,1.0,100.00,M,25.669,M,,');
 
     $tk = $_GET['tk'];
 

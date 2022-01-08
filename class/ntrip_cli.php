@@ -27,24 +27,49 @@ class ntrip_cli
     function convert_DD_to_DDMM($lat, $lon, $output = 'json')
     {
 
-        $fullcoord = substr(shell_exec('echo ' . $lat . ' ' . $lon . ' | GeoConvert -p 3 -:'), 0, -1);
-
-        $coord = explode(' ', $fullcoord);
+        $coord[0]=$lon;
+        $coord[1]=$lat;
 
         foreach ($coord as $i => $value) {
-            $coord = explode(':', $value);
-            $min = $coord[1] + (substr($coord[2], 0, -1) / 60);
+
+
+          $degrees = intval($value);
+          if(($i ==0) && ($degrees < 10 )){
+          $degrees = str_pad($degrees, 3, 0, STR_PAD_LEFT);
+          }
+          if(($i ==1) && ($degrees < 10 )){
+            $degrees = str_pad($degrees, 2, 0, STR_PAD_LEFT);
+            }
+
+          $minutes = ($value - intval($value)) * 60;
+  
+          $secondes = ($minutes - intval($minutes)) * 60;
+  
+          $secondes = str_pad($secondes, 7, 0, STR_PAD_LEFT);
+  
+            $min = intval($minutes) + (round($secondes,4) / 60);
 
             switch ($i) {
-                case 0:
+              case 0:
+                  
+                  $out['lon']['coord'] = $degrees . $min;
+                  if ($value > 0 ){
+                  $out['lon']['dir'] = 'N';
+              }else{
+                  $out['lon']['dir'] = 'S';
+              }
+                  break;
 
-                    $out['lat']['coord'] = $coord[0] . $min;
-                    $out['lat']['dir'] = substr($coord[2], -1);
+              case 1:
+                    
+                    $out['lat']['coord'] = $degrees . $min;
+                    if ($value > 0 ){
+                      $out['lat']['dir'] = 'E';
+                  }else{
+                      $out['lat']['dir'] = 'O';
+                  }
                     break;
-                case 1:
-                    $out['lon']['coord'] = $coord[0] . $min;
-                    $out['lon']['dir'] = substr($coord[2], -1);
-                    break;
+                
             }
         }
         if ($output !== 'json') {
@@ -52,7 +77,7 @@ class ntrip_cli
         } else {
             return json_encode($out, true);
         }
-    }
+    } 
 
     function init_session($tk)
     {
@@ -94,7 +119,7 @@ class ntrip_cli
         session_write_close();
 
         $startime =  time();
-        $head = ['Ntrip-Version: Ntrip/2.0', 'Ntrip-GGA:' . $nmea];
+        $head = ['Connection: Keep-Alive','Keep-Alive: 60','Ntrip-Version: Ntrip/2.0', 'Ntrip-GGA:' . $nmea];
         $targetFile = fopen(sys_get_temp_dir().'/' . $output, 'w+');
         $ch = curl_init($var);
 

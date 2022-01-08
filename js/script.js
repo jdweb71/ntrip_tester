@@ -12,17 +12,6 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
 })
 
-function get_time() {
-    var d = new Date();
-    var h = ('0' + d.getHours()).slice(-2);
-    var m = ('0' + d.getMinutes()).slice(-2);
-    var s = ('0' + d.getSeconds()).slice(-2);
-    return h + '' + m + '' + s;
-}
-
-document.querySelector('#time').value = get_time();
-
-
 
 var options = {
     enableHighAccuracy: true,
