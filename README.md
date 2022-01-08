@@ -6,10 +6,10 @@ this tool is used to test access to a ntrip caster
 ### Requirement
 - php 7
 
-- [geographiclib-tools](https://geographiclib.sourceforge.io/)
+<del> [geographiclib-tools](https://geographiclib.sourceforge.io/) </del>
 
 
-from debian: apt-get install geographiclib-tools
+<del>from debian: apt-get install geographiclib-tools</del>
 
 
 ### License
