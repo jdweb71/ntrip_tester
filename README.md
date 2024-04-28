@@ -5,7 +5,8 @@ this tool is used to test access to a ntrip caster
 
 ### Requirement
 - apache 2
-- php 
+- php
+- php-curl
 
 
 
