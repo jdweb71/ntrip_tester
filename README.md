@@ -4,12 +4,10 @@ this tool is used to test access to a ntrip caster
 
 
 ### Requirement
-- php 7
+- apache 2
+- php 
 
-<del> [geographiclib-tools](https://geographiclib.sourceforge.io/) </del>
 
-
-<del>from debian: apt-get install geographiclib-tools</del>
 
 
 ### License
