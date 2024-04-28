@@ -1,4 +1,4 @@
-# ntrip tester utility 
+# Website ntrip tester utility 
 
 this tool is used to test access to a ntrip caster
 
